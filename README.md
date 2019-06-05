@@ -40,7 +40,7 @@ Using **Gradle**
 ```gradle
 implementation 'com.github.imperiumlabs:GeoFirestore-Android:v1.4.0'
 ```
-**Using Maven**
+Using **Maven**
 ```xml
 <dependency>
     <groupId>com.github.imperiumlabs</groupId>
