@@ -1,5 +1,7 @@
 package org.imperiumlabs.geofirestore
 
+import com.google.firebase.firestore.GeoPoint
+
 // FULLY TESTED
 
 /**
@@ -10,6 +12,8 @@ class GeoLocation(
     val latitude: Double,
     // The longitude of this location in the range of [-180, 180]
     val longitude: Double) {
+
+    constructor(location: GeoPoint): this(location.latitude, location.longitude)
 
     companion object {
         /**

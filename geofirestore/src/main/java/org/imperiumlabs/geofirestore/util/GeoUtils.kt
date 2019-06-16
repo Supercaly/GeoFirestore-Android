@@ -7,7 +7,9 @@ import org.imperiumlabs.geofirestore.GeoLocation
 
 object GeoUtils {
 
-    private const val MAX_SUPPORTED_RADIUS = 8587
+    private const val MAX_SUPPORTED_RADIUS = 8587.0
+
+    private const val KM_TO_M = 1000
 
     fun distance(location1: GeoLocation, location2: GeoLocation) =
             distance(location1.latitude, location1.longitude, location2.latitude, location2.longitude)
@@ -44,11 +46,14 @@ object GeoUtils {
         return if (adjusted > 0) (adjusted % 360.0) - 180 else 180 - (-adjusted % 360)
     }
 
-    fun capRadius(radius: Double): Double {
+    fun capRadius(radius: Double) =
         if (radius > MAX_SUPPORTED_RADIUS) {
             GeoFirestore.LOGGER.warning("The radius is bigger than $MAX_SUPPORTED_RADIUS and hence we'll use that value")
-            return MAX_SUPPORTED_RADIUS.toDouble()
-        }
-        return radius
-    }
+            MAX_SUPPORTED_RADIUS
+        } else
+            radius
+
+    fun mToKm(radius: Double) = radius / KM_TO_M
+
+    fun kmToM(radius: Double) = radius * KM_TO_M
 }

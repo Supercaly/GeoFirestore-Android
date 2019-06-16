@@ -6,7 +6,6 @@ import com.google.firebase.firestore.*
 import org.imperiumlabs.geofirestore.core.GeoHash
 import org.imperiumlabs.geofirestore.core.GeoHashQuery
 import org.imperiumlabs.geofirestore.extension.mapNotNullManyTo
-import org.imperiumlabs.geofirestore.util.GeoUtils
 import java.util.logging.Logger
 
 
@@ -205,7 +204,7 @@ class GeoFirestore(val collectionReference: CollectionReference) {
      *               supported is about 8587km. If a radius bigger than this is passed we'll cap it.
      * @return The new GeoQuery object
      */
-    fun queryAtLocation(center: GeoPoint, radius: Double) = GeoQuery(this, center, GeoUtils.capRadius(radius))
+    fun queryAtLocation(center: GeoPoint, radius: Double, query: Query?) = GeoQuery(this, center, radius, query)
 
     /**
      * Returns a new SingleGeoQuery object centered at a given location and with the given radius.
