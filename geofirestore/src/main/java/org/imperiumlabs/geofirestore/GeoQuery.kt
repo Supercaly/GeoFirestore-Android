@@ -11,7 +11,8 @@ import org.imperiumlabs.geofirestore.util.GeoUtils
 /**
  * A GeoQuery object can be used for geo queries in a given circle. The GeoQuery class is thread safe.
  */
-/**
+/*
+ *
  * Creates a new GeoQuery object centered at the given location and with the given radius.
  * @param geoFirestore The GeoFirestore object this GeoQuery uses
  * @param center The center of this query

@@ -32,11 +32,13 @@ dependencies {
     implementation "com.google.firebase:firebase-core:$firebase_core_version"
     implementation "com.google.firebase:firebase-firestore:$firebase_firestore_version"
 
-    //Test Implementations
+    //Unit test dependency
     testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation "com.google.truth:truth:0.44"
     testImplementation 'org.mockito:mockito-core:2.19.0'
+    //Instrumented test dependency
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
 }
