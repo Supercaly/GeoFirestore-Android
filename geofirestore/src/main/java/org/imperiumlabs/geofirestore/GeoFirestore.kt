@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.*
 import org.imperiumlabs.geofirestore.core.GeoHash
 import org.imperiumlabs.geofirestore.core.GeoHashQuery
+import org.imperiumlabs.geofirestore.extension.makeFirestoreQuery
 import org.imperiumlabs.geofirestore.extension.mapNotNullManyTo
 import java.util.logging.Logger
 
@@ -196,6 +197,20 @@ class GeoFirestore(val collectionReference: CollectionReference) {
                 }
     }
 
+    fun queryNear(center: GeoPoint, radius: Double) {
+
+    }
+
+    fun getNear(center: GeoPoint, radius: Double) {
+
+    }
+
+    private var mFilterQuery: Query? = null
+
+    fun filterQuery(lambda: CollectionReference.()->Query) {
+        mFilterQuery = this.collectionReference.lambda()
+    }
+
     /**
      * Returns a new Query object centered at the given location and with the given radius.
      *
@@ -204,7 +219,8 @@ class GeoFirestore(val collectionReference: CollectionReference) {
      *               supported is about 8587km. If a radius bigger than this is passed we'll cap it.
      * @return The new GeoQuery object
      */
-    fun queryAtLocation(center: GeoPoint, radius: Double, query: Query?) = GeoQuery(this, center, radius, query)
+    //@Deprecated("", ReplaceWith("queryNear(center, radius)", "org.imperiumlabs.geofirestore.GeoQuery"))
+    fun queryAtLocation(center: GeoPoint, radius: Double) = GeoQuery(this, center, radius, mFilterQuery)
 
     /**
      * Returns a new SingleGeoQuery object centered at a given location and with the given radius.
@@ -218,13 +234,7 @@ class GeoFirestore(val collectionReference: CollectionReference) {
         //Get the resultTasks from Firebase Queries generated from GeoHashQueries
         val resultTasks = arrayListOf<Task<QuerySnapshot>>().apply {
             GeoHashQuery.queriesAtLocation(GeoLocation(center.latitude, center.longitude), radius)
-                    .forEach {
-                        this.add(this@GeoFirestore.collectionReference
-                                .orderBy("g")
-                                .startAt(it.startValue)
-                                .endAt(it.endValue)
-                                .get())
-                    }
+                    .forEach { this.add(it.makeFirestoreQuery(mFilterQuery, this@GeoFirestore.collectionReference).get()) }
         }
         //Await the completion of all the resultTasks
         Tasks.whenAllComplete(resultTasks)

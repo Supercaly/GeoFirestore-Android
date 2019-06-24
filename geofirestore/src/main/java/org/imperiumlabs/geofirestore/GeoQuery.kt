@@ -3,6 +3,7 @@ package org.imperiumlabs.geofirestore
 import com.google.firebase.firestore.*
 import org.imperiumlabs.geofirestore.core.GeoHash
 import org.imperiumlabs.geofirestore.core.GeoHashQuery
+import org.imperiumlabs.geofirestore.extension.makeFirestoreQuery
 import org.imperiumlabs.geofirestore.listeners.EventListenerBridge
 import org.imperiumlabs.geofirestore.listeners.GeoQueryDataEventListener
 import org.imperiumlabs.geofirestore.listeners.GeoQueryEventListener
@@ -142,16 +143,6 @@ class GeoQuery(private val geoFirestore: GeoFirestore,
     }
 
     /*
-     * Given a GeoHashQuery will create a Firestore Query based
-     * upon the filterQuery or the collectionReference.
-     */
-    private fun makeFirestoreQuery(query: GeoHashQuery) =
-            (filterQuery ?: geoFirestore.collectionReference)
-                    .orderBy("g")
-                    .startAt(query.startValue)
-                    .endAt(query.endValue)
-
-    /*
      * Setup the queries considering all the old and outstanding queries.
      */
     private fun setupQueries() {
@@ -171,7 +162,7 @@ class GeoQuery(private val geoFirestore: GeoFirestore,
         for (query in newQueries)
             if (!oldQueries.contains(query)) {
                 outstandingQueries.add(query)
-                val firestoreQuery = makeFirestoreQuery(query)
+                val firestoreQuery = query.makeFirestoreQuery(filterQuery, geoFirestore.collectionReference)
 
                 //create the ListenerRegistration from the firestoreQuery for child added, changed, removed
                 handles[query] =  firestoreQuery.addSnapshotListener(queryListener)

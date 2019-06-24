@@ -56,7 +56,7 @@ class MainActivity: AppCompatActivity() {
     }
 
     private fun testGeoQuery() {
-        val geoQuery = geoFirestore.queryAtLocation(QUERY_CENTER, QUERY_RADIUS, null)
+        val geoQuery = geoFirestore.queryAtLocation(QUERY_CENTER, QUERY_RADIUS)
         geoQuery.addGeoQueryDataEventListener(object : GeoQueryDataEventListener {
             override fun onDocumentEntered(documentSnapshot: DocumentSnapshot, location: GeoPoint) {
                 val desc = documentSnapshot["DESCRIPTION"] as? String
